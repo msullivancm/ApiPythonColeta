@@ -8,21 +8,38 @@ class carga_no_banco():
         self.conn = sqlite3.connect('kpis.db')
         self.cur = self.conn.cursor()
 
+    def appendtocsv(self, tabela):
+        if tabela == list:
+            for t in tabela:
+                data=pd.read_excel(tabela)
+                data.to_csv(tabela+".csv",index=False,header=False,mode="a")
+            
     def carga_excel_sqlite(self, tabela):
-        finalexcelsheet = pd.DataFrame()
         if type(tabela)==list:
+            wb = pd.DataFrame()
             for t in tabela:
                 wb = pd.read_excel(t, sheet_name=None)
+                wb.rename('Tarefas','Tarefas2')
                 for sheet in wb:
-                    wb[sheet].to_sql(sheet,self.conn, index=False, if_exists='append')
-                    self.conn.commit()
-                self.conn.close()
-        else:
-            wb = pd.read_excel(tabela, sheet_name=None)
-            for sheet in wb:
-                wb[sheet].to_sql(sheet,self.conn, index=False, if_exists='append')
+                    try:
+                        wb[sheet].to_sql(sheet,
+                                 self.conn, 
+                                 if_exists='fail')
+                    except:
+                        print("Erro na carga")
+                self.conn.execute("CREATE UNIQUE INDEX Tarefas_Identificação_da_tarefa_IDX ON Tarefas ('Identificação da tarefa');")
                 self.conn.commit()
-            self.fechar()
+                self.fechar()
+    
+    def execute_query(self, query):
+        try:
+            df = pd.read_sql(query, self.conn)
+            self.cur(query)
+            self.conn.commit()
+            print("Query successful")
+            return df
+        except:
+            print(f"Error: '{query}'")
             
     def fechar(self):
         self.cur.close()
@@ -40,7 +57,7 @@ class Coleta():
     
         self.config = ConfigParser()
         self.config.read("config.ini")
-        #print(self.config.sections())
+        print(self.config.sections())
         
         self.nome_arquivo=[]
         self.lista_de_dataframes=[]
@@ -56,6 +73,10 @@ class Coleta():
         return lista_caminho
     
 obj = Coleta('arquivos', 'planner', 'base', 'dir', 'tipo', 'file')
-for file in obj.gera_caminho():
-    carga_no_banco().carga_excel_sqlite(file)
 
+carga_no_banco().appendtocsv(obj.gera_caminho()) 
+
+
+""" df = carga_no_banco().execute_query("INSERT INTO Tarefas ('Identificação da tarefa', 'Nome da tarefa') VALUES('teste2','sullivan2');")
+print(df) """
+            
