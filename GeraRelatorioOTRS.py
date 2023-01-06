@@ -3,18 +3,31 @@ import pymysql
 import pandas as pd
 import openpyxl 
 import sys
+from configparser import ConfigParser
 
-dir_destino = 'C:/OTRS'
-usa_ssl = False
+#lê arquivo de configuração e carrega variáveis
+config = ConfigParser()
+config.read('gerarelatoriootrs.ini')
+print(config.sections())
+dbdriver=config.get('CONNECT','driver')
+dbdatabase=config.get('CONNECT','database')
+dbssl=config.get('CONNECT','ssl')
+dbhost=config.get('CONNECT','host')
+dbuser=config.get('CONNECT','user')
+dbpass=config.get('CONNECT','pass')
+dbsslca=config.get('CONNECT','ssl_ca')
+dbsslkey=config.get('CONNECT','ssl_key')
+dbsslcert=config.get('CONNECT','ssl_cert')
+dir_destino =config.get('DIR','target')
 
-if usa_ssl:
-    db_connection_str = 'mysql+pymysql://ferroport_ro:EeGh7heing@ferroport.managed-otrs.com/otrs'
-    db_ssl_args = {'ssl_ca': 'C:/OTRS/ferroport-ca-cert.pem',
-                'ssl_key': 'C:/OTRS/ferroport-client-key.pem',
-                'ssl_cert': 'C:/OTRS/ferroport-client-cert.pem'}
+if dbssl=='True':
+    db_connection_str = f'{driver}+pymysql://{dbuser}:{dbpass}@{dbhost}/{dbdatabase}'
+    db_ssl_args = {'ssl_ca': dbsslca,
+                'ssl_key': dbsslkey,
+                'ssl_cert': dbsslcert}
     db_connection = create_engine(db_connection_str, connect_args=db_ssl_args)
 else: 
-    db_connection_str = 'mysql+pymysql://frpro:Ferroport#2022@10.27.0.253/otrs'
+    db_connection_str = f'{dbdriver}+pymysql://{dbuser}:{dbpass}@{dbhost}/{dbdatabase}'
     db_connection = create_engine(db_connection_str)
 
 query = """SELECT
