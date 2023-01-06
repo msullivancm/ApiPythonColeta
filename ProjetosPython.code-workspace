@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../ProjetosPython"
+		},
+		{
+			"name": "ApiPythonColeta",
+			"path": "."
+		}
+	],
+	"settings": {
+		"totvsLanguageServer.welcomePage": false
+	}
+}
