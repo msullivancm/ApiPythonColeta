@@ -8,7 +8,7 @@ def parse_plan(df):
     parsed = json.loads(res)
     return parsed
 
-base = r'H:\TI\Sistemas\PowerBI Ferroport\AutomacaoKPIsPowerBI'
+base = r'\\s02fs01\Depto\TI\Sistemas\PowerBI Ferroport\AutomacaoKPIsPowerBI'
 dir = 'planner'
 tipo = 'xlsx'
 arqnames = ['TI_Infraestrutura.xlsx','TI_Sistemas.xlsx']

@@ -1,4 +1,4 @@
-from planner import coleta
+from coleta import Coleta
 import numpy as np 
 from fastapi import FastAPI
 from fastapi import Response
