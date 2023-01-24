@@ -10,10 +10,15 @@ app = FastAPI()
 async def root():
     return {"ApiDeColetaDeDados":"by Marcus Sullivan"}
 
+@app.get("/otrscloud")
+async def otrscloud():
+    from consultaotrscloud import consultaOtrsCloud
+    return consultaOtrsCloud()
+    
 '''@app.get("/impressao")
 async def impressao():'''
 def impressao():
-    #df=pd.DataFrame()
+    df=pd.DataFrame()
     pasta = origem + '\impressao'
     primeiro = True
     arqtemp=''
