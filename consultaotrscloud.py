@@ -77,5 +77,7 @@ def consultaOtrsCloud():
     '''
 
     df = pd.read_sql(query, con=db_connection)
+    df.to_excel('consultaOtrsCloud.xlsx')
 
 #print(df)
+consultaOtrsCloud()
