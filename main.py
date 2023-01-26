@@ -2,6 +2,7 @@
 from fastapi import FastAPI
 import pandas as pd
 import os
+from typing import Union
 
 origem = r"C:\Users\eu_uv\OneDrive\MeusDocumentos\Clientes\Ferroport\TI\KPIs da TI\AutomacaoKPIsPowerBI"
 
@@ -10,10 +11,27 @@ app = FastAPI()
 async def root():
     return {"ApiDeColetaDeDados":"by Marcus Sullivan"}
 
-@app.get("/otrscloud")
-async def otrscloud():
+@app.get("/items/{dt_criacao}")
+async def read_item(dt_criacao: str, q: Union[str, None] = None, short: bool = False):
+    dt_criacao = {"dt_criacao": dt_criacao}
     from consultaotrscloud import consultaOtrsCloud
-    return consultaOtrsCloud()
+    return f'{"Retorno": {dt_criacao}}'
+    #return consultaOtrsCloud(dt_criacao)
+    if q:
+        item.update({"q": q})
+    if not short:
+        item.update(
+            {"description": "This is an amazing item that has a long description"}
+        )
+    return item
+
+#Exemplo: http://127.0.0.1:8000/items/foo?short=true
+
+'''@app.get("/otrscloud/{dt_criacao}")
+async def otrscloud(dt_criacao: str | None = None):
+    from consultaotrscloud import consultaOtrsCloud
+    return f'{"Retorno": {dt_criacao}}'
+    #return consultaOtrsCloud(dt_criacao)'''
     
 '''@app.get("/impressao")
 async def impressao():'''
