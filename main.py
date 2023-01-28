@@ -12,12 +12,13 @@ async def root():
 
 @app.get("/otrscloud")
 async def otrscloud():
-    from consultaotrscloud import consultaOtrsCloud
-    return consultaOtrsCloud()
+    #from consultaotrscloud import consultaOtrsCloud
+    #consultaOtrsCloud()
+    df = pd.read_excel('consultaOtrsCloud.xlsx')
+    return df.json()
     
-'''@app.get("/impressao")
-async def impressao():'''
-def impressao():
+@app.get("/impressao")
+async def impressao():
     df=pd.DataFrame()
     pasta = origem + '\impressao'
     primeiro = True
@@ -35,6 +36,6 @@ def impressao():
                     #df.to_csv(arqtemp, index=False,header=False,mode="a")
     return df
 
-print(impressao())
+#print(impressao())
 
 #Iniciar servidor: python -m uvicorn main:app --reload
