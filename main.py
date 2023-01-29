@@ -2,6 +2,7 @@
 from fastapi import FastAPI
 import pandas as pd
 import os
+from typing import Union
 
 origem = r"C:\Users\eu_uv\OneDrive\MeusDocumentos\Clientes\Ferroport\TI\KPIs da TI\AutomacaoKPIsPowerBI"
 
@@ -12,10 +13,8 @@ async def root():
 
 @app.get("/otrscloud")
 async def otrscloud():
-    #from consultaotrscloud import consultaOtrsCloud
-    #consultaOtrsCloud()
-    df = pd.read_excel('consultaOtrsCloud.xlsx')
-    return df.json()
+    from consultaotrscloud import consultaOtrsCloud
+    return consultaOtrsCloud()
     
 @app.get("/impressao")
 async def impressao():

@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 import pandas as pd
 
-def consultaOtrsCloud():
+def consultaOtrsCloud(dt_criacao):
     db_connection_str = 'mysql+pymysql://ferroport_ro:EeGh7heing@ferroport.managed-otrs.com/otrs'
     db_ssl_args = {'ssl_ca': 'C:/OTRS/ferroport-ca-cert.pem',
                 'ssl_key': 'C:/OTRS/ferroport-client-key.pem',
@@ -10,7 +10,7 @@ def consultaOtrsCloud():
     
     df = pd.DataFrame()
 
-    query = '''
+    query = f'''
     SELECT
             t.id,
             t.TN AS 'Numero do Ticket',
@@ -74,10 +74,11 @@ def consultaOtrsCloud():
             ts.id = t.ticket_state_id
     left join dynamic_field_value dfv on t.id = dfv.object_id
     left join dynamic_field df on dfv.field_id = df.id 
+    where t.CREATE_TIME >= {dt_criacao}
     '''
 
     df = pd.read_sql(query, con=db_connection)
     df.to_excel('consultaOtrsCloud.xlsx')
 
 #print(df)
-consultaOtrsCloud()
+consultaOtrsCloud('20230101')
