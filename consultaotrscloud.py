@@ -1,5 +1,8 @@
+# coding: utf-8
+ 
 from sqlalchemy import create_engine
 import pandas as pd
+from datetime import date
 
 def consultaOtrsCloud(dt_criacao):
     db_connection_str = 'mysql+pymysql://ferroport_ro:EeGh7heing@ferroport.managed-otrs.com/otrs'
@@ -81,4 +84,5 @@ def consultaOtrsCloud(dt_criacao):
     df.to_excel('consultaOtrsCloud.xlsx')
 
 #print(df)
-consultaOtrsCloud('20230101')
+consultaOtrsCloud(date.today().strftime('%Y%m')) 
+#print(date.today().strftime('%Y%m'))
